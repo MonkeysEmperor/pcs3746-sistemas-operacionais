@@ -1,1 +1,1 @@
-obj-y := sys_hello_world.o
+obj-y := sys_print_ppid.o

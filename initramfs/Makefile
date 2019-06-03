@@ -2,21 +2,22 @@ CC=$(CROSS_COMPILE)gcc -Wall -Wextra -static -g
 
 $(shell mkdir -p build/initramfs_root)
 
-.PHONY: all clean copy_files
-all: build/rootfs.gz copy_files
+.PHONY: all clean
+all: build/rootfs.gz
 
 clean:
 		rm -rf build
 		find -name '*.o' -delete
 
-copy_files:
+build/rootfs.gz: build/initramfs_root/init build/initramfs_root/son build/initramfs_root/father
 		cd build/initramfs_root ; \
 		find -type f -print0 | cpio -0 -ov -H newc | gzip -9 > ../rootfs.gz
-		
-build/rootfs.gz: build/initramfs_root/init 
-		
 
 build/initramfs_root/init: init.o
 		$(CC) -o $@ $^
 
+build/initramfs_root/father: father.o
+		$(CC) -o $@ $^
 
+build/initramfs_root/son: son.o
+		$(CC) -o $@ $^

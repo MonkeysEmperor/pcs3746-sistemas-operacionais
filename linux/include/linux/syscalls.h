@@ -907,7 +907,7 @@ asmlinkage long sys_statx(int dfd, const char __user *path, unsigned flags,
 			  unsigned mask, struct statx __user *buffer);
 asmlinkage long sys_stack_push(int value);
 asmlinkage long sys_stack_pop(void);
-asmlinkage long sys_hello_world(void);
+asmlinkage long sys_print_ppid(void);
 asmlinkage long sys_stop_process(int pid);
 asmlinkage long sys_continue_process(void);
 
