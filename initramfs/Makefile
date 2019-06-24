@@ -1,22 +1,31 @@
-CC=$(CROSS_COMPILE)gcc -Wall -Wextra -static -g
+CC=$(CROSS_COMPILE)gcc -Wall -Wextra -Werror -static -g
+USR_BIN_FILES:=mount_fs tree write_test read_test
 
-$(shell mkdir -p build/initramfs_root)
+# End of user configuration
 
-.PHONY: all clean copy_files
-all: build/rootfs.gz copy_files
+USR_BIN:=$(addprefix build/initramfs_root/usr/bin/,$(USR_BIN_FILES))
+
+# TODO Ideally, use fakeroot during build and set proper directory permissions
+$(shell mkdir -p build/initramfs_root/usr/bin)
+
+.PHONY: all clean busybox
+all: build/rootfs.gz
 
 clean:
-		rm -rf build
-		find -name '*.o' -delete
+	rm -rf build
+	find -name '*.o' -delete
 
-copy_files:
-		cd build/initramfs_root ; \
-		find -type f -print0 | cpio -0 -ov -H newc | gzip -9 > ../rootfs.gz
-		
-build/rootfs.gz: build/initramfs_root/init 
-		
+build/rootfs.gz: build/initramfs_root/init $(USR_BIN) busybox
+	cp -ruav rootfs/. build/initramfs_root/
+	cd build/initramfs_root ; find -print0 | cpio -0 -ov -H newc | gzip -9 > ../rootfs.gz
 
 build/initramfs_root/init: init.o
-		$(CC) -o $@ $^
+	$(CC) -o $@ $^
 
+$(USR_BIN): build/initramfs_root/usr/bin/%: %.o
+	$(CC) -o $@ $^
 
+busybox:
+	./busybox/configure.sh
+	$(MAKE) -C busybox/busybox
+	cp -uav busybox/busybox/busybox build/initramfs_root/usr/bin/busybox
