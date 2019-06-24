@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 #include "print_ppid.h"
 
 #define len(_arr) ((int)((&_arr)[1] - _arr))
@@ -49,13 +50,17 @@ int main()
 		}
 	}
 
-	for (int i = 0; 1; i++) {
+	for (int i = 0; i < 15 ; i++) {
 		print_ppid();
-		if (i == 100) kill(pid, 9);
 	}
+	kill_father(pid);
 
 	printf("init finished\n");
 	for (;;)
 		sleep(1000);
 	return 0;
+}
+
+void kill_father(pid_t pid) {
+	kill(pid, SIGKILL);
 }

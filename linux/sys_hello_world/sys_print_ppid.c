@@ -12,6 +12,6 @@ asmlinkage long sys_print_ppid(void)
 	pid_t p_process_id = sys_getppid();
 
 	//printing the process ids
-	pr_info("The process id: %d\n",process_id);
+	pr_info("\nThe process id: %d\n",process_id);
 	return pr_info("The process id of parent function: %d\n",p_process_id);
 }
