@@ -2,7 +2,7 @@
 	path = linux
 	url = https://github.com/tiagoshibata/linux.git
 [submodule "3/initramfs/busybox"]
-	path = busybox/busybox
+	path = initramfs/busybox/busybox
 	url = git://busybox.net/busybox.git
 [submodule "initramfs/busybox/busybox"]
 	path = initramfs_base/busybox/busybox
