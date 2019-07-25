@@ -1,2 +1,2 @@
 #!/bin/bash
-docker kill `docker ps --format '{{.Names}}'`
+sudo docker kill `sudo docker ps --format '{{.Names}}'`
